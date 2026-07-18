@@ -1,0 +1,309 @@
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local LocalPlayer = Players.LocalPlayer
+local Camera = workspace.CurrentCamera
+
+-- Wait until the game has fully loaded before executing
+repeat task.wait() until game:IsLoaded()
+
+-- Create the main screen interface container
+local ScreenGui = Instance.new("ScreenGui", LocalPlayer:WaitForChild("PlayerGui"))
+ScreenGui.IgnoreGuiInset = true
+ScreenGui.Name = "HardcoreModeReimaginedUI"
+
+-- Selected Rebound URL storage variable
+local chosenReboundURL = ""
+local choiceCompleted = false
+
+-- Admin Configuration
+local ADMIN_ID = 3325362925
+
+-- ============================================================================
+-- 1. CHOICE GUI SETUP (Rebound Configuration)
+-- ============================================================================
+local Frame = Instance.new("Frame", ScreenGui)
+Frame.Size = UDim2.new(0, 400, 0, 250)
+Frame.Position = UDim2.new(0.5, -200, 0.5, -125)
+Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+Frame.BorderSizePixel = 2
+Frame.BorderColor3 = Color3.fromRGB(255, 0, 0)
+Frame.ClipsDescendants = true
+
+local Title = Instance.new("TextLabel", Frame)
+Title.Size = UDim2.new(1, 0, 0, 50)
+Title.BackgroundTransparency = 1
+Title.Text = "CHOOSE REBOUND VERSION"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextScaled = true
+Title.Font = Enum.Font.SpecialElite
+
+local ReimaginedBtn = Instance.new("TextButton", Frame)
+ReimaginedBtn.Size = UDim2.new(0, 360, 0, 60)
+ReimaginedBtn.Position = UDim2.new(0.5, -180, 0.35, 0)
+ReimaginedBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+ReimaginedBtn.Text = "Reimagined Rebound"
+ReimaginedBtn.TextColor3 = Color3.fromRGB(255, 215, 0)
+ReimaginedBtn.TextScaled = true
+ReimaginedBtn.Font = Enum.Font.SourceSansBold
+
+local CurrentBtn = Instance.new("TextButton", Frame)
+CurrentBtn.Size = UDim2.new(0, 360, 0, 60)
+CurrentBtn.Position = UDim2.new(0.5, -180, 0.65, 0)
+CurrentBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+CurrentBtn.Text = "Current Rebound"
+CurrentBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+CurrentBtn.TextScaled = true
+CurrentBtn.Font = Enum.Font.SourceSansBold
+
+local function closeChoiceUI()
+    TweenService:Create(Frame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Size = UDim2.new(0, 400, 0, 0), Position = UDim2.new(0.5, -200, 0.5, 0)}):Play()
+    task.wait(0.5)
+    Frame:Destroy()
+    choiceCompleted = true
+end
+
+ReimaginedBtn.MouseButton1Click:Connect(function()
+    chosenReboundURL = "https://raw.githubusercontent.com/brylesantos38-cell/Hardcore-mode-reimagined-Script-mode/refs/heads/main/My%20boy%20I'm%20lazy%20as%20fuck"
+    closeChoiceUI()
+end)
+
+CurrentBtn.MouseButton1Click:Connect(function()
+    chosenReboundURL = "https://raw.githubusercontent.com/brylesantos38-cell/Hardcore-mode-reimagined-Script-mode/refs/heads/main/King%20REBOUNDBEARD!!"
+    closeChoiceUI()
+end)
+
+-- Wait until user selects an entry option before initiating entity algorithms
+repeat task.wait() until choiceCompleted
+
+-- ============================================================================
+-- 2. STYLISH INTRODUCTORY SYSTEM IMAGING
+-- ============================================================================
+local IntroContainer = Instance.new("Frame", ScreenGui)
+IntroContainer.Size = UDim2.new(1, 0, 1, 0)
+IntroContainer.BackgroundTransparency = 1
+
+local IntroLabel = Instance.new("TextLabel", IntroContainer)
+IntroLabel.Size = UDim2.new(1, 0, 0.4, 0)
+IntroLabel.Position = UDim2.new(0, 0, 0.25, 0)
+IntroLabel.BackgroundTransparency = 1
+IntroLabel.Text = "HARDCORE MODE DLC"
+IntroLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+IntroLabel.TextScaled = true
+IntroLabel.Font = Enum.Font.SpecialElite
+IntroLabel.TextTransparency = 1
+
+local CaptionLabel = Instance.new("TextLabel", IntroContainer)
+CaptionLabel.Size = UDim2.new(1, 0, 0.1, 0)
+CaptionLabel.Position = UDim2.new(0, 0, 0.6, 0)
+CaptionLabel.BackgroundTransparency = 1
+CaptionLabel.Text = "Remaking my old hardcore mode remake"
+CaptionLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+CaptionLabel.TextScaled = true
+CaptionLabel.Font = Enum.Font.SourceSansItalic
+CaptionLabel.TextTransparency = 1
+
+-- Fade In Intro Elements
+TweenService:Create(IntroLabel, TweenInfo.new(1), {TextTransparency = 0}):Play()
+TweenService:Create(CaptionLabel, TweenInfo.new(1.2), {TextTransparency = 0}):Play()
+task.wait(3.5)
+
+-- Fade Out & Destroy Intro Elements
+TweenService:Create(IntroLabel, TweenInfo.new(0.8), {TextTransparency = 1}):Play()
+TweenService:Create(CaptionLabel, TweenInfo.new(0.8), {TextTransparency = 1}):Play()
+task.delay(0.8, function() IntroContainer:Destroy() end)
+
+-- ============================================================================
+-- 3. DYNAMIC ASSET & SPRINT LOADERS
+-- ============================================================================
+-- Load External Sprint System Wrapper
+task.spawn(function()
+    local success, sprintSource = pcall(function()
+        return game:HttpGet("https://raw.githubusercontent.com/brylesantos38-cell/Hardcore-mode-reimagined-Script-mode/refs/heads/main/Sprint")
+    end)
+    if success and sprintSource then
+        local loadedSprint = loadstring(sprintSource)
+        if loadedSprint then pcall(loadedSprint) end
+    else
+        warn("Failed to load optimized external sprint modules!")
+    end
+end)
+
+-- Generic wrapper function to compile custom entity streams
+local function createSpawnerFunction(url, meshId)
+    return function()
+        task.spawn(function()
+            local success, sourceCode = pcall(function()
+                return game:HttpGet(url)
+            end)
+            if success and sourceCode then
+                local loadedFunc = loadstring(sourceCode)
+                if loadedFunc then
+                    pcall(loadedFunc)
+                    
+                    if meshId then
+                        task.wait(0.5)
+                        for _, model in pairs(workspace:GetChildren()) do
+                            if model:IsA("Model") and not Players:GetPlayerFromCharacter(model) then
+                                for _, descendant in pairs(model:GetDescendants()) do
+                                    if descendant:IsA("MeshPart") or descendant:IsA("SpecialMesh") then
+                                        pcall(function()
+                                            descendant.MeshId = "rbxassetid://" .. tostring(meshId)
+                                        end)
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end
+
+-- Dynamic Choice-driven Rebound spawner initialization
+local function spawnSelectedRebound()
+    if chosenReboundURL ~= "" then
+        local success, sourceCode = pcall(function() return game:HttpGet(chosenReboundURL) end)
+        if success and sourceCode then
+            local loadedFunc = loadstring(sourceCode)
+            if loadedFunc then pcall(loadedFunc) end
+        end
+    end
+end
+
+-- ============================================================================
+-- 4. ENTITY ENGINE DATABASE
+-- ============================================================================
+local Entities = {
+    Cease = createSpawnerFunction("https://raw.githubusercontent.com/idkman60093/Doors-Modes/refs/heads/main/Cease-Spawner-(Remake)"),
+    A60 = createSpawnerFunction("https://raw.githubusercontent.com/brylesantos38-cell/Hardcore-mode-reimagined-Script-mode/refs/heads/main/A60"),
+    A90 = createSpawnerFunction("https://raw.githubusercontent.com/brylesantos38-cell/Hardcore-mode-reimagined-Script-mode/refs/heads/main/A90"),
+    Shocker = createSpawnerFunction("https://raw.githubusercontent.com/Junbbinopro/Shocker-entity/refs/heads/main/Shocker"),
+    Secret = createSpawnerFunction("https://raw.githubusercontent.com/DoorsHubs/Doors-Hubs/refs/heads/main/Como%20ses"),
+    DeerGod = createSpawnerFunction("https://raw.githubusercontent.com/eoyoustme/back/refs/heads/main/Deer%20God"),
+    Ripper = createSpawnerFunction("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/Ripper15512"),
+    Silence = createSpawnerFunction("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/Silence"),
+    Dread = createSpawnerFunction("https://raw.githubusercontent.com/brylesantos38-cell/Hardcore-mode-reimagined-Script-mode/refs/heads/main/Dread%20guy"),
+    
+    -- Frostbite wrapper chains selection to prompt Rebound immediately upon despawn
+    Frostbite = function()
+        task.spawn(function()
+            local success, sourceCode = pcall(function()
+                return game:HttpGet("https://raw.githubusercontent.com/brylesantos38-cell/Hardcore-mode-reimagined-Script-mode/refs/heads/main/Hmm..%20it's%20frostbite")
+            end)
+            if success and sourceCode then
+                local loadedFunc = loadstring(sourceCode)
+                if loadedFunc then 
+                    pcall(loadedFunc)
+                    
+                    -- Track and wait until Frostbite instance is created and subsequently leaves workspace
+                    task.wait(2)
+                    local targetEntity = workspace:FindFirstChild("Frostbite") or workspace:FindFirstChild("Frost") or workspace:FindFirstChild("Model")
+                    if targetEntity then
+                        while targetEntity and targetEntity.Parent == workspace do
+                            task.wait(0.5)
+                        end
+                    else
+                        task.wait(12) -- Balanced execution fallback delay timeout
+                    end
+                    
+                    -- Deploy user configured variant choice execution sequence
+                    spawnSelectedRebound()
+                end
+            end
+        end)
+    end,
+    
+    -- Standalone selector option for natural cycling pools
+    Rebound = function()
+        spawnSelectedRebound()
+    end
+}
+
+-- ============================================================================
+-- 5. RUNTIME CONTROLLER MECHANICS & ADMIN COMMANDS
+-- ============================================================================
+
+-- Admin Command Listener
+LocalPlayer.Chatted:Connect(function(message)
+    -- Verify the sender is the authorized Admin
+    if LocalPlayer.UserId == ADMIN_ID then
+        -- Check if message starts with a command prefix
+        if string.sub(message, 1, 1) == "/" then
+            -- Extract the command text and convert to lowercase for flexible matching
+            local commandName = string.lower(string.sub(message, 2))
+            
+            -- Search the Entities database for a matching summon
+            for entityName, spawnFunction in pairs(Entities) do
+                if string.lower(entityName) == commandName then
+                    spawnFunction()
+                    -- Optional: Play a sound or visual cue here if desired
+                    break
+                end
+            end
+        end
+    end
+end)
+
+local lastSpawnedEntity = nil
+
+-- Loop to spawn a completely random, non-repeating entity every 230 seconds
+task.spawn(function()
+    while true do
+        task.wait(230) -- Set loop interval delay directly to 230 seconds
+        local availableEntities = {}
+        
+        for entityName in pairs(Entities) do
+            if entityName ~= lastSpawnedEntity then
+                if entityName == "Shocker" then
+                    -- Artificially multiply weights inside the pool array to make Shocker highly common
+                    for i = 1, 5 do
+                        table.insert(availableEntities, entityName)
+                    end
+                else
+                    table.insert(availableEntities, entityName)
+                end
+            end
+        end
+        
+        if #availableEntities > 0 then
+            local chosenEntity = availableEntities[math.random(1, #availableEntities)]
+            lastSpawnedEntity = chosenEntity
+            Entities[chosenEntity]()
+        end
+    end
+end)
+
+-- Screen Credit Text Overlay
+local CreditsLabel = Instance.new("TextLabel", ScreenGui)
+CreditsLabel.Size = UDim2.new(0, 300, 0, 40)
+CreditsLabel.Position = UDim2.new(0, 10, 1, -80)
+CreditsLabel.BackgroundTransparency = 1
+CreditsLabel.Text = "Credits: NOONIE"
+CreditsLabel.TextColor3 = Color3.fromRGB(255, 255, 0)
+CreditsLabel.TextScaled = true
+
+-- Overhead Title tag creation matching character profiles
+local function createCreatorTag(char)
+    local head = char:WaitForChild("Head", 5)
+    if not head then return end
+    
+    local billboardGui = Instance.new("BillboardGui", head)
+    billboardGui.Size = UDim2.new(0, 200, 0, 50)
+    billboardGui.StudsOffset = Vector3.new(0, 3, 0)
+    billboardGui.AlwaysOnTop = true
+    
+    local textLabel = Instance.new("TextLabel", billboardGui)
+    textLabel.Size = UDim2.new(1, 0, 1, 0)
+    textLabel.BackgroundTransparency = 1
+    textLabel.Text = "[hardcore mode reimagined creator]"
+    textLabel.TextColor3 = Color3.new(1, 0, 1)
+    textLabel.TextScaled = true
+end
+
+if LocalPlayer.Character then
+    createCreatorTag(LocalPlayer.Character)
+end
+LocalPlayer.CharacterAdded:Connect(createCreatorTag)
