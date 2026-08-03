@@ -1,4 +1,4 @@
-        local Players = game:GetService("Players")
+local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 
 local player = Players.LocalPlayer
@@ -6,7 +6,7 @@ local character = player.Character or player.CharacterAdded:Wait()
 local humanoid = character:WaitForChild("Humanoid")
 
 local function spawnShocker()
-    local shockerModel = game:GetObjects("rbxassetid://98078959499274")[1]
+    local shockerModel = game:GetObjects("rbxassetid://123279499986209")[1]
     shockerModel.PrimaryPart = shockerModel:FindFirstChild("HumanoidRootPart") or shockerModel:FindFirstChildWhichIsA("Part")
     
     local camera = Workspace.CurrentCamera
@@ -16,12 +16,20 @@ local function spawnShocker()
     local oogaBoogaaPart = shockerModel:WaitForChild("OOGA BOOGAAAA")
     local horrorScream = shockerModel:WaitForChild("OOGA BOOGAAAA"):WaitForChild("HORROR SCREAM 15")
 
+    -- Play Main Sound on spawn
+    local mainSound = Instance.new("Sound")
+    mainSound.SoundId = "rbxassetid://9113115842"
+    mainSound.Volume = 3
+    mainSound.Parent = oogaBoogaaPart
+    mainSound:Play()
+    game.Debris:AddItem(mainSound, 10)
+
     local lookDuration = 4
     local startTime = tick()
     local playerLookingAtShocker = true
 
     while playerLookingAtShocker do
-        wait(0.1)
+        task.wait(0.1)
 
         local angle = (oogaBoogaaPart.Position - character.PrimaryPart.Position).unit
         local direction = camera.CFrame.LookVector
@@ -29,6 +37,15 @@ local function spawnShocker()
         if (angle:Dot(direction) > 0.9) then
             if tick() - startTime >= lookDuration then
                 horrorScream:Play()
+                
+                -- Play Damage Sound when player takes damage
+                local damageSound = Instance.new("Sound")
+                damageSound.SoundId = "rbxassetid://297569488"
+                damageSound.Volume = 3
+                damageSound.Parent = oogaBoogaaPart
+                damageSound:Play()
+                game.Debris:AddItem(damageSound, 5)
+
                 humanoid:TakeDamage(30)
                 playerLookingAtShocker = false
 
@@ -38,38 +55,50 @@ local function spawnShocker()
                 while oogaBoogaaPart.Position.Y > targetPosition.Y do
                     local directionToPlayer = (targetPosition - oogaBoogaaPart.Position).unit
                     oogaBoogaaPart.Position = oogaBoogaaPart.Position + directionToPlayer * speed * 0.1
-                    wait(0.1)
+                    task.wait(0.1)
                 end
 
                 oogaBoogaaPart.CanCollide = false
                 oogaBoogaaPart.Anchored = false
-                wait(3)
+                task.wait(3)
                 shockerModel:Destroy()
-game:GetService("ReplicatedStorage").GameStats["Player_".. game.Players.LocalPlayer.Name].Total.DeathCause.Value = "Shocker"
-firesignal(game.ReplicatedStorage.RemotesFolder.DeathHint.OnClientEvent, {"You died to who you call Shocker...","Dont look at it or it stuns you!"},"Blue")
+                
+                local playerName = game.Players.LocalPlayer.Name
+                if game.ReplicatedStorage:FindFirstChild("GameStats") and game.ReplicatedStorage.GameStats:FindFirstChild("Player_"..playerName) then
+                    game.ReplicatedStorage.GameStats["Player_"..playerName].Total.DeathCause.Value = "Shocker"
+                end
+                
+                if game.ReplicatedStorage:FindFirstChild("RemotesFolder") and game.ReplicatedStorage.RemotesFolder:FindFirstChild("DeathHint") then
+                    firesignal(game.ReplicatedStorage.RemotesFolder.DeathHint.OnClientEvent, {"You died to who you call Shocker...", "Dont look at it or it stuns you!"}, "Blue")
+                end
                 break
             end
         else
-            
             oogaBoogaaPart.CanCollide = false
             oogaBoogaaPart.Anchored = false
             break
         end
     end
-oogaBoogaaPart.CanCollide = false
-oogaBoogaaPart.Anchored = false
-wait(3)
+    
+    oogaBoogaaPart.CanCollide = false
+    oogaBoogaaPart.Anchored = false
+    task.wait(3)
     shockerModel:Destroy()
----====== Load achievement giver ======---
-local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Custom%20Achievements/Source.lua"))()
 
----====== Display achievement ======---
-achievementGiver({
-    Title = "Shocking Experience",
-    Desc = "Look at me.",
-    Reason = "Encounter Shocker.",
-    Image = "rbxassetid://17857830685"
-})
+    ---====== Load achievement giver ======---
+    local success, achievementGiver = pcall(function()
+        return loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Custom%20Achievements/Source.lua"))()
+    end)
+
+    ---====== Display achievement ======---
+    if success and achievementGiver then
+        achievementGiver({
+            Title = "Shocking Experience",
+            Desc = "Look at me.",
+            Reason = "Encounter Shocker.",
+            Image = "rbxassetid://17857830685"
+        })
+    end
 end
 
 spawnShocker()
