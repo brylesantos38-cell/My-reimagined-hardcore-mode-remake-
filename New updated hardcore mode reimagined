@@ -70,7 +70,7 @@ ReimaginedBtn.MouseButton1Click:Connect(function()
 end)
 
 CurrentBtn.MouseButton1Click:Connect(function()
-    chosenReboundURL = "https://raw.githubusercontent.com/brylesantos38-cell/Hardcore-mode-reimagined-Script-mode/refs/heads/main/King%20REBOUNDBEARD!!"
+    chosenReboundURL = "https://raw.githubusercontent.com/brylesantos38-cell/Hardcore-mode-reimagined-Script-mode/refs/heads/main/King%20REBOUNDBEARD!!%20UPDTED"
     closeChoiceUI()
 end)
 
