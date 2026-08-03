@@ -115,8 +115,21 @@ TweenService:Create(CaptionLabel, TweenInfo.new(0.8), {TextTransparency = 1}):Pl
 task.delay(0.8, function() IntroContainer:Destroy() end)
 
 -- ============================================================================
--- 3. DYNAMIC ASSET & SPRINT LOADERS
+-- 3. DYNAMIC ASSET, LIGHT & SPRINT LOADERS
 -- ============================================================================
+-- Load External Light Asset (Not an entity)
+task.spawn(function()
+    local success, lightSource = pcall(function()
+        return game:HttpGet("https://raw.githubusercontent.com/brylesantos38-cell/My-reimagined-hardcore-mode-remake-/refs/heads/main/Light")
+    end)
+    if success and lightSource then
+        local loadedLight = loadstring(lightSource)
+        if loadedLight then pcall(loadedLight) end
+    else
+        warn("Failed to load custom Light asset.")
+    end
+end)
+
 -- Load External Sprint System Wrapper
 task.spawn(function()
     local success, sprintSource = pcall(function()
@@ -180,7 +193,7 @@ local Entities = {
     Cease = createSpawnerFunction("https://raw.githubusercontent.com/idkman60093/Doors-Modes/refs/heads/main/Cease-Spawner-(Remake)"),
     A60 = createSpawnerFunction("https://raw.githubusercontent.com/brylesantos38-cell/Hardcore-mode-reimagined-Script-mode/refs/heads/main/A60"),
     A90 = createSpawnerFunction("https://raw.githubusercontent.com/brylesantos38-cell/Hardcore-mode-reimagined-Script-mode/refs/heads/main/A90"),
-    Shocker = createSpawnerFunction("https://raw.githubusercontent.com/Junbbinopro/Shocker-entity/refs/heads/main/Shocker"),
+    Shocker = createSpawnerFunction("https://raw.githubusercontent.com/brylesantos38-cell/My-reimagined-hardcore-mode-remake-/refs/heads/main/Shocker%20heh"),
     Secret = createSpawnerFunction("https://raw.githubusercontent.com/DoorsHubs/Doors-Hubs/refs/heads/main/Como%20ses"),
     DeerGod = createSpawnerFunction("https://raw.githubusercontent.com/eoyoustme/back/refs/heads/main/Deer%20God"),
     Ripper = createSpawnerFunction("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/Ripper15512"),
@@ -276,7 +289,11 @@ task.spawn(function()
     end
 end)
 
--- Screen Credit Text Overlay
+-- ============================================================================
+-- 6. CREDITS & CAPTIONS
+-- ============================================================================
+
+-- Main Credit Label
 local CreditsLabel = Instance.new("TextLabel", ScreenGui)
 CreditsLabel.Size = UDim2.new(0, 300, 0, 40)
 CreditsLabel.Position = UDim2.new(0, 10, 1, -80)
@@ -284,6 +301,17 @@ CreditsLabel.BackgroundTransparency = 1
 CreditsLabel.Text = "Credits: NOONIE"
 CreditsLabel.TextColor3 = Color3.fromRGB(255, 255, 0)
 CreditsLabel.TextScaled = true
+CreditsLabel.Font = Enum.Font.SourceSansBold
+
+-- Extra Context Caption (Noonie and Ping)
+local SubCreditLabel = Instance.new("TextLabel", ScreenGui)
+SubCreditLabel.Size = UDim2.new(0, 400, 0, 30)
+SubCreditLabel.Position = UDim2.new(0, 10, 1, -45)
+SubCreditLabel.BackgroundTransparency = 1
+SubCreditLabel.Text = "Noonie and Ping are the original creators of OG Hardcore Mode"
+SubCreditLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+SubCreditLabel.TextScaled = true
+SubCreditLabel.Font = Enum.Font.SourceSansItalic
 
 -- Overhead Title tag creation matching character profiles
 local function createCreatorTag(char)
@@ -301,6 +329,7 @@ local function createCreatorTag(char)
     textLabel.Text = "[hardcore mode reimagined creator]"
     textLabel.TextColor3 = Color3.new(1, 0, 1)
     textLabel.TextScaled = true
+    textLabel.Font = Enum.Font.GothamBold
 end
 
 if LocalPlayer.Character then
