@@ -120,7 +120,7 @@ task.delay(0.8, function() IntroContainer:Destroy() end)
 -- Load External Sprint System Wrapper
 task.spawn(function()
     local success, sprintSource = pcall(function()
-        return game:HttpGet("https://raw.githubusercontent.com/brylesantos38-cell/Hardcore-mode-reimagined-Script-mode/refs/heads/main/Sprint")
+        return game:HttpGet("https://raw.githubusercontent.com/brylesantos38-cell/Hardcore-mode-reimagined-Script-mode/refs/heads/main/Sprint%20update")
     end)
     if success and sprintSource then
         local loadedSprint = loadstring(sprintSource)
