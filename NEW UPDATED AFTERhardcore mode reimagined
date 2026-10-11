@@ -65,7 +65,7 @@ local function closeChoiceUI()
 end
 
 ReimaginedBtn.MouseButton1Click:Connect(function()
-    chosenReboundURL = "https://raw.githubusercontent.com/brylesantos38-cell/Hardcore-mode-reimagined-Script-mode/refs/heads/main/My%20boy%20I'm%20lazy%20as%20fuck"
+    chosenReboundURL = "https://raw.githubusercontent.com/brylesantos38-cell/My-reimagined-hardcore-mode-remake-/refs/heads/main/Rebound%20updated%20reimagined"
     closeChoiceUI()
 end)
 
